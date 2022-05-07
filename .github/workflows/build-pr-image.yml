@@ -135,7 +135,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.PERSONAL_TOKEN }}
           
-          - name: Create manifests
+      - name: Create manifests
         env:
           DOCKER_CLI_EXPERIMENTAL: enabled
         run: |
