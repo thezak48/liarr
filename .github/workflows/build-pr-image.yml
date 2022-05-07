@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        architecture: [linux-arm64, linux-amd64]
+        architecture: [linux-amd64]
     needs: [check]
     outputs:
       version: ${{ steps.prep.outputs.version }}
@@ -121,7 +121,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        registry: [docker.io, ghcr.io, quay.io]
+        registry: [ghcr.io]
     needs: [build]
     steps:
       - name: Checkout
@@ -145,8 +145,6 @@ jobs:
           VERSION=${{ needs.build.outputs.version }}
           BRANCH=${{ needs.build.outputs.branch }}
           [[ -f linux-amd64.Dockerfile ]]  && AMD64=${SOURCE}-linux-amd64
-          [[ -f linux-arm64.Dockerfile ]]  && ARM64=${SOURCE}-linux-arm64
-          [[ -f linux-arm-v7.Dockerfile ]] && ARMV7=${SOURCE}-linux-arm-v7
           docker manifest create ${IMAGE}:${TAG}${BRANCH} ${AMD64} ${ARM64} ${ARMV7}
           docker manifest push   ${IMAGE}:${TAG}${BRANCH}
           docker manifest create ${IMAGE}:${TAG}${BRANCH}-${VERSION//\~/-} ${AMD64} ${ARM64} ${ARMV7}
